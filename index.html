@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Entrar — Secure File Store</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <meta name="description" content="Acesse sua conta para gerenciar arquivos sensíveis." />
+</head>
+<body>
+  <main class="container" role="main">
+    <section class="card" aria-labelledby="heading-login">
+      <h1 id="heading-login">Entrar</h1>
+      <p class="lead">Acesse sua conta para gerenciar arquivos sensíveis.</p>
+
+      <div id="flash" role="status" aria-live="polite" class="flash" hidden></div>
+
+      <form id="loginForm" novalidate>
+        <label for="email">E‑mail</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+
+        <label for="password">Senha</label>
+        <div class="password-row">
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+          <button type="button" id="togglePwd" aria-pressed="false" aria-label="Mostrar senha">Mostrar</button>
+        </div>
+
+        <meter id="pwdStrength" min="0" max="4" value="0" aria-hidden="true"></meter>
+        <div id="pwdHint" class="hint">Use uma senha forte (mínimo 12 caracteres).</div>
+
+        <div class="actions">
+          <button id="submitBtn" type="submit">Entrar</button>
+        </div>
+
+        <div id="formError" role="alert" class="error" hidden></div>
+      </form>
+
+      <footer class="small">
+        <a href="/register.html">Criar conta</a> • <a href="/forgot.html">Esqueci a senha</a>
+      </footer>
+    </section>
+  </main>
+
+  <!-- 
+    API base detection:
+    - Se você quiser sobrescrever (ex.: backend remoto), antes de carregar main.js defina:
+      <script>window.API_BASE = "https://api.seudominio.com";</script>
+    - Caso contrário, o script abaixo assume:
+      * localhost/127.0.0.1 => http://localhost:4000
+      * outros hosts => relative path (""), útil quando front e api compartilham origem
+  -->
+  <script>
+    window.API_BASE = window.API_BASE || (
+      (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+        ? "http://localhost:4000"
+        : ""
+    );
+    // show flash messages from query params (e.g., ?msg=Verificado com sucesso)
+    (function showFlashFromQuery(){
+      const params = new URLSearchParams(location.search);
+      const msg = params.get("msg") || params.get("message") || params.get("notice");
+      if (msg) {
+        const flash = document.getElementById("flash");
+        flash.hidden = false;
+        flash.textContent = decodeURIComponent(msg);
+      }
+      // if ?verified=true we show a friendly note
+      if (params.get("verified") === "true") {
+        const flash = document.getElementById("flash");
+        flash.hidden = false;
+        flash.textContent = "E‑mail verificado com sucesso. Faça login.";
+      }
+    })();
+  </script>
+
+  <script src="./main.js" defer></script>
+</body>
+</html>
