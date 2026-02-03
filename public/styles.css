@@ -1,0 +1,141 @@
+:root{
+  --bg: #0f172a;
+  --card: #0b1220;
+  --muted: #94a3b8;
+  --accent: #60a5fa;
+  --accent-2: #7c3aed;
+  --glass: rgba(255,255,255,0.03);
+  --radius: 12px;
+  --max-width: 1200px;
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%;margin:0}
+body{
+  background: radial-gradient(1000px 600px at 10% 10%, rgba(124,58,237,0.12), transparent 10%),
+              radial-gradient(800px 500px at 90% 90%, rgba(96,165,250,0.08), transparent 10%),
+              linear-gradient(180deg,#071028 0%, #071229 100%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  color:#e6eef8;
+  padding:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Shell */
+.app-shell{
+  width:100%;
+  max-width:var(--max-width);
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  gap:20px;
+  align-items:start;
+  transition: all 300ms ease;
+}
+
+/* Mobile: single column */
+@media (max-width:900px){
+  .app-shell{ grid-template-columns: 1fr; padding:12px; }
+  .sidebar{ position:fixed; left:0; top:0; bottom:0; transform: translateX(-110%); z-index:40; }
+  .sidebar.open{ transform: translateX(0); box-shadow: 8px 0 30px rgba(0,0,0,0.6); }
+  .overlay{ display:block; }
+}
+
+/* Cards */
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius);
+  padding:20px;
+  box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Sidebar */
+.sidebar{
+  height: calc(100vh - 56px);
+  padding:18px;
+  position:relative;
+  overflow:auto;
+  transform: translateY(0);
+  transition: transform 350ms cubic-bezier(.2,.9,.2,1);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius);
+}
+.brand{
+  display:flex; gap:10px; align-items:center; margin-bottom:14px;
+}
+.logo{
+  width:42px;height:42px;border-radius:10px;
+  background: linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;font-weight:700;color:#011;
+  box-shadow: 0 8px 30px rgba(124,58,237,0.12);
+}
+.brand h2{font-size:1.05rem;margin:0}
+.nav{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.nav button{
+  background:transparent;border:0;color:var(--muted);padding:10px 12px;border-radius:10px;text-align:left;
+  cursor:pointer;font-weight:600;display:flex;gap:10px;align-items:center;transition:all 180ms ease;
+}
+.nav button.active, .nav button:hover{
+  background: linear-gradient(90deg, rgba(96,165,250,0.08), rgba(124,58,237,0.06));
+  color: #e6eef8;
+  transform: translateX(6px);
+}
+
+/* Topbar (mobile) */
+.topbar{
+  display:none; align-items:center; justify-content:space-between; gap:12px;
+  width:100%; margin-bottom:12px;
+}
+@media (max-width:900px){
+  .topbar{display:flex}
+}
+
+/* Content area */
+.content{
+  min-height:60vh;
+  padding:20px;
+  border-radius: var(--radius);
+}
+
+/* Dashboard grid */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:16px;
+}
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
+
+/* user list */
+.user-list{display:flex;flex-direction:column;gap:10px}
+.user{
+  display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:var(--glass);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.user:hover{ transform: translateY(-4px); box-shadow: 0 12px 30px rgba(2,6,23,0.6); }
+.avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#60a5fa,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021}
+
+/* Buttons */
+.btn{
+  display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:10px;border:0;background:var(--accent);color:#001;font-weight:700;cursor:pointer;
+}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.03)}
+
+/* small */
+.small{color:var(--muted);font-size:0.9rem}
+
+/* subtle animations */
+.fade-in{animation:fadeIn 420ms ease forwards;opacity:0}
+@keyframes fadeIn{to{opacity:1}}
+.slide-up{animation:slideUp 420ms cubic-bezier(.2,.9,.2,1) forwards;opacity:0;transform:translateY(8px)}
+@keyframes slideUp{to{opacity:1;transform:none}}
+
+/* overlay for mobile sidebar */
+.overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:30; opacity:0; transition: opacity 200ms ease; }
+.overlay.show{ opacity:1 }
