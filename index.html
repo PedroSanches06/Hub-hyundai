@@ -1,11 +1,76 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Meu Site Seguro</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+
+  <!-- Basic security-oriented meta -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <!-- Note: CSP via meta is limited; still helpful for static sites -->
+  <meta http-equiv="Content-Security-Policy"
+        content="
+          default-src 'self';
+          base-uri 'self';
+          form-action 'self';
+          frame-ancestors 'none';
+          img-src 'self' data:;
+          style-src 'self';
+          script-src 'self';
+          connect-src 'self' https:;
+        ">
+
+  <style>
+    :root { --bg:#0b1220; --card:#121a2b; --text:#e6e9f2; --muted:#a9b2c7; --accent:#5dd6c8; --danger:#ff6b6b; }
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body{ margin:0; min-height:100vh; display:grid; place-items:center; background: radial-gradient(1200px 600px at 20% 10%, #182544, var(--bg)); color:var(--text); }
+    .card{ width:min(420px, 92vw); background:rgba(18,26,43,.92); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:24px; box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+    h1{ margin:0 0 6px; font-size:22px; }
+    p{ margin:0 0 18px; color:var(--muted); font-size:14px; line-height:1.4; }
+    label{ display:block; margin:12px 0 6px; font-size:13px; color:var(--muted); }
+    input{ width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:#0e1627; color:var(--text); outline:none; }
+    input:focus{ border-color: rgba(93,214,200,.7); box-shadow: 0 0 0 4px rgba(93,214,200,.12); }
+    .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; }
+    .btn{ width:100%; margin-top:16px; padding:12px 14px; border:0; border-radius:12px; background: linear-gradient(90deg, #5dd6c8, #6aa7ff); color:#081022; font-weight:700; cursor:pointer; }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; }
+    .small{ font-size:12px; color:var(--muted); margin-top:12px; }
+    .error{ margin-top:12px; padding:10px 12px; border-radius:12px; background: rgba(255,107,107,.12); border:1px solid rgba(255,107,107,.35); color:#ffd7d7; display:none; }
+    .ok{ margin-top:12px; padding:10px 12px; border-radius:12px; background: rgba(93,214,200,.12); border:1px solid rgba(93,214,200,.35); color:#ccfff8; display:none; }
+    .hint{ margin-top:10px; font-size:12px; color:var(--muted); }
+    .link{ color:#cfe7ff; text-decoration:none; }
+  </style>
 </head>
+
 <body>
-    <h1>Bem-vindo ao meu site!</h1>
+  <main class="card">
+    <h1>Entrar</h1>
+    <p>Use seu e-mail e senha. Contas são criadas <strong>apenas por administradores</strong>.</p>
+
+    <form id="loginForm" autocomplete="on" novalidate>
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" inputmode="email" autocomplete="username"
+             placeholder="voce@empresa.com" required />
+
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" autocomplete="current-password"
+             placeholder="••••••••" required minlength="8" />
+
+      <button id="submitBtn" class="btn" type="submit">Entrar</button>
+
+      <div id="errorBox" class="error"></div>
+      <div id="okBox" class="ok"></div>
+
+      <div class="hint">
+        Sem opção de “Criar conta”? Isso é intencional. Se precisar de acesso, contate o administrador.
+      </div>
+      <div class="small">
+        Dica: não reutilize senhas. O site usa HTTPS, e a validação ocorre no servidor.
+      </div>
+    </form>
+  </main>
+
+  <script src="./js/app.js" defer></script>
 </body>
 </html>
