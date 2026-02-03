@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Secure File Store</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container" role="main">
+    <section class="card">
+      <h1>Área Administrativa</h1>
+      <p id="welcome" class="lead">Carregando...</p>
+
+      <div id="adminActions">
+        <button id="logoutBtn">Logout</button>
+      </div>
+
+      <div id="adminContent"></div>
+    </section>
+  </main>
+
+  <script>
+    async function fetchMe() {
+      try {
+        const res = await fetch('/admin/me', { credentials: 'include' });
+        if (!res.ok) {
+          // se não autorizado, redireciona para login
+          window.location.href = '/';
+          return;
+        }
+        const data = await res.json();
+        const user = data?.user;
+        document.getElementById('welcome').textContent = `Olá, ${user.email} — você está logado como administrador.`;
+      } catch (err) {
+        console.error(err);
+        window.location.href = '/';
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
+      window.location.href = '/';
+    });
+
+    fetchMe();
+  </script>
+</body>
+</html>
