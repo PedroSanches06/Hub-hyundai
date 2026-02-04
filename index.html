@@ -1,513 +1,1887 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hyundai Portal • Home</title>
-  <meta name="description" content="Modern dark-blue portal with animated navigation and organized sections." />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hyundai Portal</title>
+  <meta name="theme-color" content="#0b3d91" />
+
   <style>
-    /* -----------------------------
-       DESIGN TOKENS
-    ------------------------------ */
     :root{
-      --bg0:#061225;
-      --bg1:#071a33;
-      --bg2:#0a2346;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --stroke: rgba(255,255,255,.12);
-      --text:#eaf2ff;
-      --muted: rgba(234,242,255,.72);
-      --accent:#49b2ff;
-      --accent2:#2de2ff;
-      --good:#45f3a6;
-      --warn:#ffd36a;
-
-      --shadow: 0 16px 50px rgba(0,0,0,.45);
-      --radius: 18px;
-      --radius2: 26px;
-      --max: 1120px;
-
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --bg1:#f5f9ff;
+      --bg2:#eaf2ff;
+      --card:#ffffffcc;
+      --stroke:#e6efff;
+      --text:#0a1b3a;
+      --muted:#5c6e8a;
+      --brand:#0b3d91;
+      --brand2:#1e88ff;
+      --brand3:#56c2ff;
+      --danger:#e53935;
+      --success:#2e7d32;
+      --shadow: 0 18px 60px rgba(8, 36, 90, .15);
+      --shadow2: 0 10px 30px rgba(8, 36, 90, .12);
+      --radius: 20px;
+      --radius2: 14px;
+      --ease: cubic-bezier(.2,.9,.2,1);
     }
 
-    /* -----------------------------
-       BASE
-    ------------------------------ */
-    *{ box-sizing: border-box; }
-    html,body{ height:100%; }
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
     body{
       margin:0;
-      font-family: var(--font);
-      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
       background:
-        radial-gradient(900px 600px at 10% 10%, rgba(73,178,255,.18), transparent 55%),
-        radial-gradient(700px 520px at 90% 12%, rgba(45,226,255,.10), transparent 55%),
-        radial-gradient(900px 700px at 50% 100%, rgba(73,178,255,.10), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1) 35%, var(--bg2));
+        radial-gradient(1200px 700px at 18% 10%, #d8ebff 0%, transparent 60%),
+        radial-gradient(900px 600px at 88% 20%, #c6f1ff 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
     }
 
-    a{ color:inherit; text-decoration:none; }
-    button{ font-family:inherit; }
+    /* subtle animated blobs */
+    .blob{
+      position:fixed;
+      width:420px;
+      height:420px;
+      filter: blur(30px);
+      opacity:.55;
+      z-index:-1;
+      border-radius: 999px;
+      animation: floaty 10s var(--ease) infinite;
+      pointer-events:none;
+    }
+    .blob.one{ left:-140px; top:-140px; background: radial-gradient(circle at 30% 30%, #69b7ff, transparent 60%); }
+    .blob.two{ right:-180px; top:80px; background: radial-gradient(circle at 30% 30%, #70e3ff, transparent 60%); animation-duration: 12s; }
+    .blob.three{ left:30%; bottom:-220px; background: radial-gradient(circle at 30% 30%, #2f7cff, transparent 60%); animation-duration: 13s; opacity:.35;}
+    @keyframes floaty{
+      0%,100%{ transform: translate(0,0) scale(1); }
+      50%{ transform: translate(18px, -22px) scale(1.03); }
+    }
 
-    .wrap{
-      width:min(var(--max), calc(100% - 40px));
+    .container{
+      width:min(1120px, 92vw);
       margin:0 auto;
+      padding: 22px 0 60px;
     }
 
-    /* -----------------------------
-       TOP BAR
-    ------------------------------ */
-    header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: rgba(6,18,37,.55);
-      border-bottom: 1px solid rgba(255,255,255,.10);
+    .glass{
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+      border: 1px solid rgba(255,255,255,.55);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
-    .topbar{
+    .btn{
+      border:none;
+      outline:none;
+      cursor:pointer;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight: 650;
+      transition: transform .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease), opacity .22s var(--ease);
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+      text-decoration:none;
+      white-space: nowrap;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      color:#fff;
+      box-shadow: 0 12px 30px rgba(11, 61, 145, .22);
+    }
+    .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 18px 45px rgba(11,61,145,.26); }
+    .btn-ghost{
+      background: rgba(255,255,255,.7);
+      color: var(--brand);
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow2);
+    }
+    .btn-ghost:hover{ transform: translateY(-2px); background: rgba(255,255,255,.85); }
+    .btn-danger{
+      background: rgba(229,57,53,.10);
+      border:1px solid rgba(229,57,53,.20);
+      color: var(--danger);
+    }
+    .btn-danger:hover{ transform: translateY(-2px); background: rgba(229,57,53,.14); }
+
+    .field{ display:flex; flex-direction:column; gap:8px; }
+    label{ font-size: 12px; letter-spacing:.4px; color: var(--muted); font-weight:700; text-transform: uppercase;}
+    input, select, textarea{
+      padding: 12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--stroke);
+      outline:none;
+      background: rgba(255,255,255,.9);
+      font-size: 14px;
+      transition: box-shadow .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+    }
+    input:focus, textarea:focus, select:focus{
+      border-color: rgba(30,136,255,.35);
+      box-shadow: 0 0 0 6px rgba(30,136,255,.12);
+      transform: translateY(-1px);
+    }
+
+    /* Language switcher pill */
+    .lang{
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      gap:8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(230,239,255,.9);
+      background: rgba(255,255,255,.75);
+      box-shadow: var(--shadow2);
+    }
+    .lang select{
+      border:none;
+      background: transparent;
+      padding: 6px 8px;
+      border-radius: 999px;
+      font-weight: 750;
+      color: var(--brand);
+      cursor:pointer;
+      outline:none;
+    }
+    .lang .globe{ width:18px; height:18px; display:grid; place-items:center; }
+
+    /* Topbar (app) */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background: rgba(245,249,255,.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(230,239,255,.7);
+    }
+    .topbar-inner{
+      width:min(1120px, 92vw);
+      margin: 0 auto;
       padding: 14px 0;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
       gap: 14px;
     }
 
     .brand{
       display:flex;
       align-items:center;
-      gap: 12px;
+      gap:12px;
       min-width: 240px;
     }
-
-    .logoBox{
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(73,178,255,.22), rgba(45,226,255,.10));
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 12px 30px rgba(0,0,0,.25);
-      display:grid;
-      place-items:center;
+    .logo{
+      width:40px;height:40px;border-radius: 14px;
+      background: linear-gradient(135deg, #0b3d91, #1e88ff 60%, #56c2ff);
+      box-shadow: 0 12px 30px rgba(11,61,145,.25);
+      position:relative;
       overflow:hidden;
     }
-    /* Replace this placeholder with your official Hyundai logo */
-    .logoBox img{
-      width: 80%;
-      height: 80%;
-      object-fit: contain;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.45));
-    }
-    .brandText{
-      display:flex;
-      flex-direction:column;
-      line-height:1.1;
-    }
-    .brandText strong{
-      font-size: 14px;
-      letter-spacing:.7px;
-      text-transform: uppercase;
-    }
-    .brandText span{
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .actions{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-    }
-
-    .pill{
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      transition: transform .2s ease, background .2s ease, border-color .2s ease;
-      cursor:pointer;
-      user-select:none;
-    }
-    .pill:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.09);
-      border-color: rgba(73,178,255,.35);
-    }
-
-    .kbd{
-      font-size:12px;
-      padding: 4px 8px;
-      border-radius: 9px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-    }
-
-    /* Hamburger */
-    .hamburger{
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      transition: transform .2s ease, background .2s ease, border-color .2s ease;
-    }
-    .hamburger:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.09);
-      border-color: rgba(73,178,255,.35);
-    }
-    .hamLines{
-      width: 18px;
-      height: 12px;
-      position:relative;
-    }
-    .hamLines span{
-      position:absolute;
-      left:0;
-      width:100%;
-      height:2px;
-      background: rgba(234,242,255,.92);
-      border-radius: 999px;
-      transition: transform .25s ease, top .25s ease, opacity .25s ease;
-    }
-    .hamLines span:nth-child(1){ top:0; }
-    .hamLines span:nth-child(2){ top:5px; opacity:.95; }
-    .hamLines span:nth-child(3){ top:10px; }
-
-    .hamburger.active .hamLines span:nth-child(1){ top:5px; transform: rotate(45deg); }
-    .hamburger.active .hamLines span:nth-child(2){ opacity:0; }
-    .hamburger.active .hamLines span:nth-child(3){ top:5px; transform: rotate(-45deg); }
-
-    /* -----------------------------
-       HERO
-    ------------------------------ */
-    .hero{
-      padding: 34px 0 12px;
-    }
-    .heroGrid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 18px;
-      align-items:stretch;
-    }
-
-    .heroCard{
-      border-radius: var(--radius2);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .heroCard::before{
+    .logo:before{
       content:"";
       position:absolute;
-      inset:-2px;
-      background: radial-gradient(600px 300px at 20% 20%, rgba(73,178,255,.25), transparent 60%),
-                  radial-gradient(500px 300px at 90% 10%, rgba(45,226,255,.18), transparent 60%);
-      filter: blur(14px);
-      opacity:.7;
-      pointer-events:none;
-    }
-
-    .heroContent{
-      position:relative;
-      padding: 22px 22px 20px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(73,178,255,.12);
-      border: 1px solid rgba(73,178,255,.22);
-      color: rgba(234,242,255,.92);
-      font-size: 13px;
-      letter-spacing: .2px;
-    }
-    .badgeDot{
-      width: 9px;
-      height: 9px;
-      border-radius: 99px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 0 6px rgba(73,178,255,.14);
-    }
-    h1{
-      margin: 14px 0 8px;
-      font-size: clamp(26px, 3.2vw, 40px);
-      line-height:1.05;
-      letter-spacing: -.5px;
-    }
-    .sub{
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.6;
-      max-width: 62ch;
-      margin: 0 0 16px;
-    }
-
-    .ctaRow{
-      display:flex;
-      flex-wrap:wrap;
-      gap: 10px;
-      margin-top: 6px;
-    }
-    .btn{
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      padding: 12px 14px;
-      border-radius: 14px;
-      cursor:pointer;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.10);
-      border-color: rgba(73,178,255,.35);
-    }
-    .btn.primary{
-      background: linear-gradient(135deg, rgba(73,178,255,.22), rgba(45,226,255,.14));
-      border-color: rgba(73,178,255,.35);
-    }
-
-    .sideCard{
-      border-radius: var(--radius2);
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap: 14px;
-      position:relative;
-      overflow:hidden;
-    }
-    .sideCard::after{
-      content:"";
-      position:absolute;
-      right:-40px;
-      top:-40px;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle at 30% 30%, rgba(73,178,255,.25), transparent 60%);
-      filter: blur(10px);
-      opacity:.7;
-    }
-    .metric{
-      position:relative;
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-    }
-    .metric strong{
-      font-size: 14px;
-      color: rgba(234,242,255,.92);
-    }
-    .metric span{
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.5;
-    }
-    .progress{
-      position:relative;
-      width:100%;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.25);
-      border: 1px solid rgba(255,255,255,.10);
-      overflow:hidden;
-    }
-    .progress > i{
-      display:block;
-      height:100%;
-      width: 62%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 999px;
-      box-shadow: 0 10px 24px rgba(73,178,255,.25);
-      animation: load 1.6s ease both;
-    }
-    @keyframes load{
-      from{ width: 18%; opacity:.7; }
-      to{ width: 62%; opacity:1; }
-    }
-
-    /* -----------------------------
-       SECTIONS GRID
-    ------------------------------ */
-    main{
-      padding: 16px 0 70px;
-    }
-
-    .sectionHead{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 12px;
-      margin: 18px 0 12px;
-    }
-    .sectionHead h2{
-      margin:0;
-      font-size: 18px;
-      letter-spacing: .2px;
-    }
-    .sectionHead p{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-    }
-
-    .card{
-      grid-column: span 6;
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 16px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.25);
-      position:relative;
-      overflow:hidden;
-      transform: translateY(0);
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
-      cursor:pointer;
-      min-height: 140px;
-    }
-    .card:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.07);
-      border-color: rgba(73,178,255,.30);
-    }
-
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(420px 240px at 20% 20%, rgba(73,178,255,.16), transparent 60%),
-                  radial-gradient(420px 240px at 90% 30%, rgba(45,226,255,.10), transparent 60%);
+      width:70px;height:70px;
+      left:-18px; top:-18px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), transparent 55%);
+      transform: rotate(15deg);
       opacity:.65;
-      pointer-events:none;
     }
+    .brand h1{ margin:0; font-size: 16px; letter-spacing: .2px; }
+    .brand p{ margin:0; font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-    .cardInner{
-      position:relative;
-      display:flex;
-      gap: 14px;
-      align-items:flex-start;
-    }
-
-    .icon{
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+    .hamburger{
+      width:44px;height:44px;
+      border-radius: 14px;
+      border:1px solid rgba(230,239,255,.9);
+      background: rgba(255,255,255,.75);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
       display:grid;
       place-items:center;
-      flex: 0 0 auto;
+      transition: transform .22s var(--ease), background .22s var(--ease);
     }
+    .hamburger:hover{ transform: translateY(-2px); background: rgba(255,255,255,.9); }
+    .ham-lines{ width:18px;height:12px; position:relative; }
+    .ham-lines span{
+      position:absolute; left:0; right:0;
+      height:2px; border-radius:2px;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      transition: transform .25s var(--ease), top .25s var(--ease), opacity .2s var(--ease);
+    }
+    .ham-lines span:nth-child(1){ top:0; }
+    .ham-lines span:nth-child(2){ top:5px; }
+    .ham-lines span:nth-child(3){ top:10px; }
+    .hamburger[data-open="true"] .ham-lines span:nth-child(1){ top:5px; transform: rotate(45deg); }
+    .hamburger[data-open="true"] .ham-lines span:nth-child(2){ opacity:0; }
+    .hamburger[data-open="true"] .ham-lines span:nth-child(3){ top:5px; transform: rotate(-45deg); }
 
-    .icon svg{ opacity:.92; }
-
-    .cardTitle{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      width:100%;
-    }
-    .cardTitle strong{
-      font-size: 15px;
-      letter-spacing: .2px;
-    }
-    .tag{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      color: var(--muted);
-      white-space:nowrap;
-    }
-
-    .card p{
-      margin: 6px 0 0;
-      color: var(--muted);
-      line-height:1.55;
-      font-size: 13px;
-      max-width: 60ch;
-    }
-
-    /* -----------------------------
-       ANIMATED SIDEBAR MENU
-    ------------------------------ */
+    /* Sidebar */
     .overlay{
       position:fixed;
       inset:0;
-      background: rgba(0,0,0,.35);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: rgba(10,27,58,.34);
       opacity:0;
       pointer-events:none;
-      transition: opacity .22s ease;
-      z-index:60;
+      transition: opacity .25s var(--ease);
+      z-index: 30;
     }
-    .overlay.show{
-      opacity:1;
-      pointer-events:auto;
-    }
+    .overlay.show{ opacity:1; pointer-events:auto; }
 
-    nav.sidebar{
+    .sidebar{
       position:fixed;
-      top:0;
-      right:0;
-      height:100%;
-      width: min(420px, 92vw);
-      background: rgba(6,18,37,.82);
-      border-left: 1px solid rgba(255,255,255,.12);
-      box-shadow: -20px 0 60px rgba(0,0,0,.55);
-      transform: translateX(110%);
-      transition: transform .28s cubic-bezier(.2,.9,.2,1);
-      z-index:70;
-      display:flex;
-      flex-direction:column;
+      left:0; top:0; bottom:0;
+      width: 310px;
+      transform: translateX(-105%);
+      transition: transform .34s var(--ease);
+      z-index: 40;
+      border-right: 1px solid rgba(230,239,255,.65);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.75));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 20px 0 60px rgba(8,36,90,.14);
       padding: 16px;
-      gap: 14px;
     }
-    nav.sidebar.open{
-      transform: translateX(0);
-    }
+    .sidebar.open{ transform: translateX(0); }
 
-    .navTop{
+    .sidebar-header{
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      justify-content: space-between;
+      padding: 6px 4px 14px;
       gap: 12px;
-      padding: 6px 4px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
     }
-    .navTop strong{
-      font-size: 14px;
-      letter-spacing:.6px;
+    .sidebar-header .mini{ display:flex; align-items:center; gap:10px; }
+    .sidebar-header .mini strong{ font-size: 14px; }
+    .sidebar-header .mini span{ display:block; font-size: 12px; color: var(--muted); margin-top:2px; }
+
+    .nav{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .nav button{
+      width:100%;
+      text-align:left;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: background .2s var(--ease), transform .2s var(--ease), border-color .2s var(--ease);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .nav button:hover{
+      background: rgba(30,136,255,.08);
+      border-color: rgba(30,136,255,.12);
+      transform: translateY(-1px);
+    }
+    .nav button.active{
+      background: linear-gradient(135deg, rgba(11,61,145,.12), rgba(30,136,255,.10));
+      border-color: rgba(30,136,255,.20);
+    }
+    .nav .meta{ font-size: 12px; color: var(--muted); font-weight: 650; }
+
+    .sidebar-footer{
+      position:absolute;
+      left:16px; right:16px; bottom:16px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid rgba(230,239,255,.9);
+    }
+
+    /* App main */
+    .app{ display:none; min-height:100vh; }
+    .app.show{ display:block; animation: fadeIn .35s var(--ease) both; }
+    @keyframes fadeIn{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform: translateY(0); } }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+      .sidebar{ width: 86vw; max-width: 340px; }
+    }
+
+    .panel{ padding: 18px; }
+    .panel h2{ margin: 4px 0 6px; font-size: 18px; }
+    .panel p{ margin: 0; color: var(--muted); line-height: 1.5; }
+
+    .hero{
+      padding: 22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:after{
+      content:"";
+      position:absolute;
+      inset:-60px -90px auto auto;
+      width:260px;height:260px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(86,194,255,.55), transparent 62%);
+      filter: blur(8px);
+      opacity:.8;
+      transform: rotate(12deg);
+    }
+    .hero h2{ margin:0; font-size: 22px; letter-spacing: .2px; }
+    .hero .sub{ margin-top: 8px; color: var(--muted); line-height: 1.55; max-width: 60ch; }
+
+    .chiprow{ display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px; }
+    .chip{
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(30,136,255,.10);
+      border: 1px solid rgba(30,136,255,.12);
+      color: var(--brand);
+      font-weight: 750;
+      font-size: 12px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 980px){ .cards{ grid-template-columns: 1fr; } }
+    .card{
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(230,239,255,.9);
+      background: rgba(255,255,255,.7);
+      box-shadow: var(--shadow2);
+      transition: transform .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease);
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 18px 50px rgba(8,36,90,.14);
+      background: rgba(255,255,255,.85);
+    }
+    .card h3{ margin: 2px 0 8px; font-size: 15px; }
+    .card p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .card .icon{
+      width:42px;height:42px;border-radius: 16px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(11,61,145,.14), rgba(30,136,255,.10));
+      border: 1px solid rgba(30,136,255,.14);
+      margin-bottom: 12px;
+      color: var(--brand);
+      font-weight: 900;
+    }
+    .card:after{
+      content:"";
+      position:absolute;
+      right:-30px; bottom:-30px;
+      width:130px;height:130px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(30,136,255,.18), transparent 60%);
+      filter: blur(6px);
+      opacity:.85;
+    }
+
+    .widget{ padding: 18px; }
+    .widget h3{ margin:0 0 10px; font-size: 15px; }
+    .list{ display:flex; flex-direction:column; gap:10px; }
+    .item{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(230,239,255,.9);
+      transition: transform .2s var(--ease);
+    }
+    .item:hover{ transform: translateY(-2px); }
+    .dot{
+      width:10px;height:10px;border-radius: 999px;
+      margin-top: 4px;
+      background: linear-gradient(135deg, var(--brand2), var(--brand3));
+      box-shadow: 0 6px 16px rgba(30,136,255,.25);
+      flex: 0 0 auto;
+    }
+    .item .t{ font-weight: 800; font-size: 13px; margin:0; }
+    .item .d{ margin:3px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+    .page{ display:none; animation: pageIn .35s var(--ease) both; }
+    .page.show{ display:block; }
+    @keyframes pageIn{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform: translateY(0); } }
+
+    /* LOGIN (refeito: email + senha) */
+    .login{
+      min-height: 100vh;
+      display:grid;
+      place-items:center;
+      padding: 28px 0;
+    }
+    .login-card{
+      width: min(980px, 92vw);
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      overflow:hidden;
+    }
+    @media (max-width: 980px){
+      .login-card{ grid-template-columns: 1fr; }
+      .login-hero{ display:none; }
+    }
+    .login-hero{
+      padding: 28px;
+      position:relative;
+      background: linear-gradient(135deg, rgba(11,61,145,.92), rgba(30,136,255,.88));
+      color:#fff;
+    }
+    .login-hero h2{ margin:0; font-size: 26px; letter-spacing:.2px; }
+    .login-hero p{ margin: 10px 0 0; opacity:.9; line-height: 1.55; }
+    .login-hero .bubbles{
+      position:absolute; inset:auto -80px -120px auto;
+      width: 380px; height:380px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.30), transparent 60%);
+      filter: blur(8px);
+      transform: rotate(10deg);
+      opacity:.9;
+    }
+    .login-hero .bubbles2{
+      position:absolute; inset:-120px auto auto -100px;
+      width: 320px; height:320px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(86,194,255,.55), transparent 62%);
+      filter: blur(10px);
+      opacity:.8;
+    }
+
+    .login-form{
+      padding: 26px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.70));
+    }
+    .login-title{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .login-title .left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+    .login-title h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .login-title small{
+      display:block;
+      color: var(--muted);
+      margin-top: 2px;
+      font-weight: 650;
+    }
+
+    .hint{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+    .footnote{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      border:1px solid rgba(230,239,255,.95);
+      background: rgba(255,255,255,.8);
+      color: var(--muted);
+    }
+
+    /* Toast */
+    .toast-wrap{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 100;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      pointer-events:none;
+    }
+    .toast{
+      pointer-events:auto;
+      width:min(360px, 92vw);
+      padding: 12px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(230,239,255,.9);
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow2);
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+      animation: toastIn .25s var(--ease) both;
+    }
+    @keyframes toastIn{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform: translateY(0); } }
+    .toast .badge{
+      width:10px;height:10px;border-radius: 999px; margin-top:4px;
+      background: var(--brand2);
+      box-shadow: 0 6px 16px rgba(30,136,255,.25);
+    }
+    .toast.success .badge{ background: var(--success); box-shadow: 0 6px 16px rgba(46,125,50,.22); }
+    .toast.danger .badge{ background: var(--danger); box-shadow: 0 6px 16px rgba(229,57,53,.22); }
+    .toast p{ margin:0; font-size: 13px; line-height: 1.45; color: var(--text); }
+    .toast p span{ display:block; margin-top:2px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+    a.inline-link{
+      color: var(--brand);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    a.inline-link:hover{ text-decoration: underline; }
+  </style>
+</head>
+
+<body>
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+  <div class="blob three"></div>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- LOGIN VIEW -->
+  <main class="login" id="loginView">
+    <section class="login-card glass" role="region" aria-label="Tela de login">
+      <div class="login-hero">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h2 data-i18n="portalName">Hyundai Portal</h2>
+            <p data-i18n="loginHeroText" style="margin:6px 0 0; max-width: 48ch;">
+              Um portal moderno com acesso rápido a funcionalidades internas, documentos e comunicação.
+            </p>
+          </div>
+        </div>
+
+        <div class="chiprow" aria-hidden="true">
+          <span class="chip" data-i18n="chipModern">Design Moderno</span>
+          <span class="chip" data-i18n="chipSmooth">Animações Fluidas</span>
+          <span class="chip" data-i18n="chipFast">Acesso Rápido</span>
+        </div>
+
+        <p style="margin-top:18px; font-size: 12px; opacity:.88;" data-i18n="loginHeroNote">
+          Demo local (front-end). Para segurança real, use autenticação no servidor.
+        </p>
+
+        <div class="bubbles" aria-hidden="true"></div>
+        <div class="bubbles2" aria-hidden="true"></div>
+      </div>
+
+      <form class="login-form" id="loginForm" autocomplete="on">
+        <div class="login-title">
+          <div class="left">
+            <div class="logo" aria-hidden="true"></div>
+            <div>
+              <h1 data-i18n="signInTitle">Entrar</h1>
+              <small data-i18n="signInSubtitle">Use suas credenciais para acessar</small>
+            </div>
+          </div>
+
+          <div class="lang" title="Language">
+            <span class="globe" aria-hidden="true">🌐</span>
+            <select id="langSelectLogin" aria-label="Selecionar idioma">
+              <option value="pt">PT</option>
+              <option value="en">EN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email" data-i18n="emailLabel">E-mail</label>
+          <input id="email" name="email" type="email" required
+                 data-i18n-placeholder="emailPlaceholder"
+                 placeholder="ex: nome@empresa.com" />
+        </div>
+
+        <div class="field">
+          <label for="pass" data-i18n="passwordLabel">Senha</label>
+          <input id="pass" name="pass" type="password" required
+                 data-i18n-placeholder="passwordPlaceholder"
+                 placeholder="••••••••" />
+          <div class="hint" data-i18n="demoHint">
+            Demo: <span class="kbd">admin@hyundai.com</span> + <span class="kbd">portal123</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+          <button class="btn btn-primary" type="submit" style="flex:1;">
+            <span aria-hidden="true">🔐</span> <span data-i18n="accessBtn">Acessar</span>
+          </button>
+          <button class="btn btn-ghost" type="button" id="fillDemoBtn">
+            <span aria-hidden="true">✨</span> <span data-i18n="fillDemoBtn">Preencher demo</span>
+          </button>
+        </div>
+
+        <div class="footnote">
+          <span>© <span id="year"></span> <span data-i18n="portalName">Hyundai Portal</span></span>
+          <span class="kbd" data-i18n="kbdTip">Dica: Alt + M abre o menu</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- APP VIEW -->
+  <div class="app" id="appView" aria-hidden="true">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" data-open="false">
+            <div class="ham-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+          </button>
+
+          <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <div>
+              <h1 data-i18n="portalName">Hyundai Portal</h1>
+              <p id="welcomeText" data-i18n="welcomeDefault">Bem-vindo(a)!</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+          <div class="lang" title="Language">
+            <span class="globe" aria-hidden="true">🌐</span>
+            <select id="langSelectApp" aria-label="Selecionar idioma">
+              <option value="pt">PT</option>
+              <option value="en">EN</option>
+            </select>
+          </div>
+
+          <button class="btn btn-ghost" id="goHomeBtn" type="button">
+            <span aria-hidden="true">🏠</span> <span data-i18n="homeBtn">Início</span>
+          </button>
+
+          <button class="btn btn-danger" id="logoutBtn" type="button">
+            <span aria-hidden="true">↩</span> <span data-i18n="logoutBtn">Sair</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="overlay" id="overlay" tabindex="-1" aria-hidden="true"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Menu lateral">
+      <div class="sidebar-header">
+        <div class="mini">
+          <div class="logo" style="width:34px; height:34px; border-radius: 12px;" aria-hidden="true"></div>
+          <div>
+            <strong data-i18n="menuTitle">Menu</strong>
+            <span id="userMeta" data-i18n="sessionActive">Sessão ativa</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost" type="button" id="closeSidebarBtn" style="padding:10px 12px;">✕</button>
+      </div>
+
+      <nav class="nav" id="nav">
+        <button type="button" data-page="home" class="active">
+          <span data-i18n="navHome">🏠 Home</span> <span class="meta" data-i18n="navHomeMeta">Visão geral</span>
+        </button>
+        <button type="button" data-page="newsletter">
+          <span data-i18n="navNewsletter">📰 News Letter</span> <span class="meta" data-i18n="navNewsletterMeta">Comunicação</span>
+        </button>
+        <button type="button" data-page="expatriacao">
+          <span data-i18n="navExpat">✈️ Expatriação</span> <span class="meta" data-i18n="navExpatMeta">Processos</span>
+        </button>
+        <button type="button" data-page="documentos">
+          <span data-i18n="navDocs">📁 Documentos</span> <span class="meta" data-i18n="navDocsMeta">Arquivos</span>
+        </button>
+        <button type="button" data-page="suporte">
+          <span data-i18n="navSupport">🛟 Suporte</span> <span class="meta" data-i18n="navSupportMeta">Ajuda</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="meta" data-i18n="shortcuts">Atalhos</span>
+        <span class="kbd" data-i18n="escCloses">Esc fecha</span>
+      </div>
+    </aside>
+
+    <main class="container">
+      <!-- HOME -->
+      <section class="page show" id="page-home" aria-label="Home">
+        <div class="hero glass">
+          <h2 data-i18n="homeHeroTitle">Portal interno com acesso rápido</h2>
+          <p class="sub" data-i18n="homeHeroSub">
+            Acesse funcionalidades essenciais, atualizações e documentos com uma experiência moderna, fluida e responsiva.
+          </p>
+          <div class="chiprow" style="margin-top:16px;">
+            <span class="chip" data-i18n="chipBlueWhite">Azul & Branco</span>
+            <span class="chip" data-i18n="chipSidebar">Menu lateral</span>
+            <span class="chip" data-i18n="chipTransitions">Transições suaves</span>
+            <span class="chip" data-i18n="chipSPA">SPA (telas internas)</span>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+            <button class="btn btn-primary" type="button" data-goto="newsletter">
+              <span aria-hidden="true">📰</span> <span data-i18n="goNewsletter">Ir para News Letter</span>
+            </button>
+            <button class="btn btn-ghost" type="button" data-goto="documentos">
+              <span aria-hidden="true">📁</span> <span data-i18n="goDocs">Ver Documentos</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid">
+          <section class="panel glass">
+            <h2 data-i18n="quickFeaturesTitle">Funcionalidades rápidas</h2>
+            <p data-i18n="quickFeaturesSub">Escolha uma área para abrir a tela correspondente.</p>
+
+            <div class="cards" role="list" aria-label="Funcionalidades">
+              <div class="card" role="listitem" data-goto="newsletter" tabindex="0">
+                <div class="icon" aria-hidden="true">NL</div>
+                <h3 data-i18n="cardNLTitle">News Letter</h3>
+                <p data-i18n="cardNLDesc">Cadastre e-mails, publique comunicados e mantenha todos atualizados.</p>
+              </div>
+
+              <div class="card" role="listitem" data-goto="expatriacao" tabindex="0">
+                <div class="icon" aria-hidden="true">EX</div>
+                <h3 data-i18n="cardEXTitle">Expatriação</h3>
+                <p data-i18n="cardEXDesc">Checklist de etapas, prazos e anexos para processos de expatriação.</p>
+              </div>
+
+              <div class="card" role="listitem" data-goto="documentos" tabindex="0">
+                <div class="icon" aria-hidden="true">DOC</div>
+                <h3 data-i18n="cardDOCTitle">Documentos</h3>
+                <p data-i18n="cardDOCDesc">Catálogo de arquivos, políticas, formulários e downloads essenciais.</p>
+              </div>
+            </div>
+          </section>
+
+          <aside class="widget glass" aria-label="Atualizações">
+            <h3 data-i18n="updatesTitle">Atualizações rápidas</h3>
+            <div class="list">
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="update1Title">Bem-vindo ao Hyundai Portal</p>
+                  <p class="d" data-i18n="update1Desc">Use o menu hambúrguer para navegar entre as telas.</p>
+                </div>
+              </div>
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="update2Title">Dica de navegação</p>
+                  <p class="d" data-i18n="update2Desc">Clique nos cards para abrir as funcionalidades.</p>
+                </div>
+              </div>
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="update3Title">Idiomas</p>
+                  <p class="d" data-i18n="update3Desc">Você pode alternar entre Português e Inglês no topo.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- NEWSLETTER -->
+      <section class="page" id="page-newsletter" aria-label="News Letter">
+        <div class="panel glass">
+          <h2 data-i18n="nlTitle">📰 News Letter</h2>
+          <p data-i18n="nlSub">Gerencie comunicados e uma lista simples de e-mails (armazenada localmente no navegador).</p>
+        </div>
+
+        <div class="grid">
+          <section class="panel glass">
+            <h2 data-i18n="nlAddTitle">Cadastrar e-mail</h2>
+            <form id="newsletterForm" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
+              <div class="field">
+                <label for="nlEmail" data-i18n="nlEmailLabel">E-mail</label>
+                <input id="nlEmail" type="email" required data-i18n-placeholder="nlEmailPh" placeholder="nome@empresa.com" />
+              </div>
+              <div class="field">
+                <label for="nlName" data-i18n="nlNameLabel">Nome (opcional)</label>
+                <input id="nlName" type="text" data-i18n-placeholder="nlNamePh" placeholder="Ex: Maria Silva" />
+              </div>
+              <button class="btn btn-primary" type="submit">
+                <span aria-hidden="true">➕</span> <span data-i18n="nlAddBtn">Adicionar à lista</span>
+              </button>
+              <p class="hint" data-i18n="nlHint">Os dados ficam em localStorage (somente para demonstração).</p>
+            </form>
+          </section>
+
+          <aside class="widget glass">
+            <h3 data-i18n="nlListTitle">Lista de inscritos</h3>
+            <div id="nlList" class="list" aria-live="polite"></div>
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-ghost" type="button" id="nlExportBtn">
+                <span aria-hidden="true">⬇</span> <span data-i18n="nlExport">Exportar CSV</span>
+              </button>
+              <button class="btn btn-danger" type="button" id="nlClearBtn">
+                <span aria-hidden="true">🗑</span> <span data-i18n="nlClear">Limpar</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- EXPAT -->
+      <section class="page" id="page-expatriacao" aria-label="Expatriação">
+        <div class="panel glass">
+          <h2 data-i18n="exTitle">✈️ Expatriação</h2>
+          <p data-i18n="exSub">Checklist com etapas e status (exemplo). Marque o que já foi concluído.</p>
+        </div>
+
+        <div class="grid">
+          <section class="panel glass">
+            <h2 data-i18n="exChecklistTitle">Checklist</h2>
+            <div id="expChecklist" style="margin-top:12px; display:flex; flex-direction:column; gap:10px;"></div>
+
+            <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-primary" type="button" id="expSaveBtn">
+                <span aria-hidden="true">💾</span> <span data-i18n="exSave">Salvar progresso</span>
+              </button>
+              <button class="btn btn-ghost" type="button" id="expResetBtn">
+                <span aria-hidden="true">↺</span> <span data-i18n="exReset">Resetar</span>
+              </button>
+            </div>
+
+            <p class="hint" data-i18n="exHint">Salva no navegador (localStorage). Para uso real, integrar com banco/servidor.</p>
+          </section>
+
+          <aside class="widget glass">
+            <h3 data-i18n="exAttachTitle">Anexos (demo)</h3>
+            <p style="margin:0 0 10px; color:var(--muted); font-size:13px;" data-i18n="exAttachSub">
+              Simulação de upload (não envia para servidor).
+            </p>
+            <div class="field">
+              <label for="expFile" data-i18n="exChooseFile">Selecionar arquivo</label>
+              <input id="expFile" type="file" />
+            </div>
+            <button class="btn btn-ghost" type="button" id="expAttachBtn" style="margin-top:12px;">
+              <span aria-hidden="true">📎</span> <span data-i18n="exAttachBtn">Anexar (demo)</span>
+            </button>
+            <div id="expAttachList" class="list" style="margin-top:12px;"></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- DOCS -->
+      <section class="page" id="page-documentos" aria-label="Documentos">
+        <div class="panel glass">
+          <h2 data-i18n="docsTitle">📁 Documentos</h2>
+          <p data-i18n="docsSub">Catálogo de documentos (exemplo). Você pode trocar por links reais ou integrações.</p>
+        </div>
+
+        <div class="grid">
+          <section class="panel glass">
+            <h2 data-i18n="docsSearchTitle">Buscar</h2>
+            <div class="field" style="margin-top:12px;">
+              <label for="docSearch" data-i18n="docsSearchLabel">Pesquisar documento</label>
+              <input id="docSearch" type="text" data-i18n-placeholder="docsSearchPh" placeholder="Ex: Política, Formulário, Manual..." />
+            </div>
+            <div class="cards" id="docCards" style="margin-top:14px;"></div>
+          </section>
+
+          <aside class="widget glass">
+            <h3 data-i18n="docsShortcuts">Atalhos</h3>
+            <div class="list">
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="docsS1T">Políticas internas</p>
+                  <p class="d" data-i18n="docsS1D">Acesse documentos institucionais e regras atualizadas.</p>
+                </div>
+              </div>
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="docsS2T">Formulários</p>
+                  <p class="d" data-i18n="docsS2D">Modelos prontos para solicitações e processos.</p>
+                </div>
+              </div>
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="docsS3T">Manuais</p>
+                  <p class="d" data-i18n="docsS3D">Guias de uso e instruções operacionais.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- SUPPORT -->
+      <section class="page" id="page-suporte" aria-label="Suporte">
+        <div class="panel glass">
+          <h2 data-i18n="supTitle">🛟 Suporte</h2>
+          <p data-i18n="supSub">Abra uma solicitação (demo) ou registre uma dúvida. Ideal para integrar com Service Desk.</p>
+        </div>
+
+        <div class="grid">
+          <section class="panel glass">
+            <h2 data-i18n="supNew">Nova solicitação</h2>
+            <form id="supportForm" style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
+              <div class="field">
+                <label for="supTitleInput" data-i18n="supTitleLabel">Título</label>
+                <input id="supTitleInput" type="text" required data-i18n-placeholder="supTitlePh" placeholder="Ex: Acesso ao sistema" />
+              </div>
+              <div class="field">
+                <label for="supDesc" data-i18n="supDescLabel">Descrição</label>
+                <textarea id="supDesc" rows="5" required data-i18n-placeholder="supDescPh" placeholder="Descreva o problema..."></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit">
+                <span aria-hidden="true">📨</span> <span data-i18n="supSend">Enviar (demo)</span>
+              </button>
+              <p class="hint" data-i18n="supHint">Para produção, enviar para API/servidor e gerar ticket.</p>
+            </form>
+          </section>
+
+          <aside class="widget glass">
+            <h3 data-i18n="supBest">Boas práticas</h3>
+            <div class="list">
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="supB1T">Inclua prints e contexto</p>
+                  <p class="d" data-i18n="supB1D">Ajuda o time a reproduzir e resolver mais rápido.</p>
+                </div>
+              </div>
+              <div class="item">
+                <span class="dot" aria-hidden="true"></span>
+                <div>
+                  <p class="t" data-i18n="supB2T">Informe seu usuário e setor</p>
+                  <p class="d" data-i18n="supB2D">Facilita a validação de permissões e acessos.</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <div style="height: 40px;"></div>
+    </main>
+  </div>
+
+  <script>
+    /* ===============================
+       i18n (PT/EN) + App Logic
+       =============================== */
+
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    const year = $("#year");
+    year.textContent = new Date().getFullYear();
+
+    // --- i18n dictionary
+    const I18N = {
+      pt: {
+        portalName: "Hyundai Portal",
+        loginHeroText: "Um portal moderno com acesso rápido a funcionalidades internas, documentos e comunicação.",
+        loginHeroNote: "Demo local (front-end). Para segurança real, use autenticação no servidor.",
+        chipModern: "Design Moderno",
+        chipSmooth: "Animações Fluidas",
+        chipFast: "Acesso Rápido",
+
+        signInTitle: "Entrar",
+        signInSubtitle: "Use suas credenciais para acessar",
+        emailLabel: "E-mail",
+        emailPlaceholder: "ex: nome@empresa.com",
+        passwordLabel: "Senha",
+        passwordPlaceholder: "••••••••",
+        demoHint: "Demo: admin@hyundai.com + portal123",
+        accessBtn: "Acessar",
+        fillDemoBtn: "Preencher demo",
+        kbdTip: "Dica: Alt + M abre o menu",
+
+        welcomeDefault: "Bem-vindo(a)!",
+        homeBtn: "Início",
+        logoutBtn: "Sair",
+
+        menuTitle: "Menu",
+        sessionActive: "Sessão ativa",
+        shortcuts: "Atalhos",
+        escCloses: "Esc fecha",
+
+        navHome: "🏠 Home",
+        navHomeMeta: "Visão geral",
+        navNewsletter: "📰 News Letter",
+        navNewsletterMeta: "Comunicação",
+        navExpat: "✈️ Expatriação",
+        navExpatMeta: "Processos",
+        navDocs: "📁 Documentos",
+        navDocsMeta: "Arquivos",
+        navSupport: "🛟 Suporte",
+        navSupportMeta: "Ajuda",
+
+        homeHeroTitle: "Portal interno com acesso rápido",
+        homeHeroSub: "Acesse funcionalidades essenciais, atualizações e documentos com uma experiência moderna, fluida e responsiva.",
+        chipBlueWhite: "Azul & Branco",
+        chipSidebar: "Menu lateral",
+        chipTransitions: "Transições suaves",
+        chipSPA: "SPA (telas internas)",
+        goNewsletter: "Ir para News Letter",
+        goDocs: "Ver Documentos",
+
+        quickFeaturesTitle: "Funcionalidades rápidas",
+        quickFeaturesSub: "Escolha uma área para abrir a tela correspondente.",
+        cardNLTitle: "News Letter",
+        cardNLDesc: "Cadastre e-mails, publique comunicados e mantenha todos atualizados.",
+        cardEXTitle: "Expatriação",
+        cardEXDesc: "Checklist de etapas, prazos e anexos para processos de expatriação.",
+        cardDOCTitle: "Documentos",
+        cardDOCDesc: "Catálogo de arquivos, políticas, formulários e downloads essenciais.",
+
+        updatesTitle: "Atualizações rápidas",
+        update1Title: "Bem-vindo ao Hyundai Portal",
+        update1Desc: "Use o menu hambúrguer para navegar entre as telas.",
+        update2Title: "Dica de navegação",
+        update2Desc: "Clique nos cards para abrir as funcionalidades.",
+        update3Title: "Idiomas",
+        update3Desc: "Você pode alternar entre Português e Inglês no topo.",
+
+        nlTitle: "📰 News Letter",
+        nlSub: "Gerencie comunicados e uma lista simples de e-mails (armazenada localmente no navegador).",
+        nlAddTitle: "Cadastrar e-mail",
+        nlEmailLabel: "E-mail",
+        nlEmailPh: "nome@empresa.com",
+        nlNameLabel: "Nome (opcional)",
+        nlNamePh: "Ex: Maria Silva",
+        nlAddBtn: "Adicionar à lista",
+        nlHint: "Os dados ficam em localStorage (somente para demonstração).",
+        nlListTitle: "Lista de inscritos",
+        nlExport: "Exportar CSV",
+        nlClear: "Limpar",
+
+        exTitle: "✈️ Expatriação",
+        exSub: "Checklist com etapas e status (exemplo). Marque o que já foi concluído.",
+        exChecklistTitle: "Checklist",
+        exSave: "Salvar progresso",
+        exReset: "Resetar",
+        exHint: "Salva no navegador (localStorage). Para uso real, integrar com banco/servidor.",
+        exAttachTitle: "Anexos (demo)",
+        exAttachSub: "Simulação de upload (não envia para servidor).",
+        exChooseFile: "Selecionar arquivo",
+        exAttachBtn: "Anexar (demo)",
+
+        docsTitle: "📁 Documentos",
+        docsSub: "Catálogo de documentos (exemplo). Você pode trocar por links reais ou integrações.",
+        docsSearchTitle: "Buscar",
+        docsSearchLabel: "Pesquisar documento",
+        docsSearchPh: "Ex: Política, Formulário, Manual...",
+        docsShortcuts: "Atalhos",
+        docsS1T: "Políticas internas",
+        docsS1D: "Acesse documentos institucionais e regras atualizadas.",
+        docsS2T: "Formulários",
+        docsS2D: "Modelos prontos para solicitações e processos.",
+        docsS3T: "Manuais",
+        docsS3D: "Guias de uso e instruções operacionais.",
+
+        supTitle: "🛟 Suporte",
+        supSub: "Abra uma solicitação (demo) ou registre uma dúvida. Ideal para integrar com Service Desk.",
+        supNew: "Nova solicitação",
+        supTitleLabel: "Título",
+        supTitlePh: "Ex: Acesso ao sistema",
+        supDescLabel: "Descrição",
+        supDescPh: "Descreva o problema...",
+        supSend: "Enviar (demo)",
+        supHint: "Para produção, enviar para API/servidor e gerar ticket.",
+        supBest: "Boas práticas",
+        supB1T: "Inclua prints e contexto",
+        supB1D: "Ajuda o time a reproduzir e resolver mais rápido.",
+        supB2T: "Informe seu usuário e setor",
+        supB2D: "Facilita a validação de permissões e acessos.",
+
+        // Toasts / system strings
+        toastOpened: "Tela aberta",
+        toastLoginOk: "Login realizado",
+        toastLoginOkD: "Acesso liberado ao Hyundai Portal.",
+        toastLoginBad: "Credenciais inválidas",
+        toastLoginBadD: "Use admin@hyundai.com / portal123 (demo).",
+        toastRequired: "Campos obrigatórios",
+        toastRequiredD: "Preencha e-mail e senha.",
+        toastEmailInvalid: "E-mail inválido",
+        toastEmailInvalidD: "Informe um e-mail válido.",
+        toastDemoFilled: "Demo preenchida",
+        toastDemoFilledD: "Clique em Acessar para entrar.",
+        toastLoggedOut: "Sessão encerrada",
+        toastLoggedOutD: "Você saiu do portal.",
+        toastAdded: "Adicionado",
+        toastAddedD: "E-mail incluído na News Letter.",
+        toastAlready: "Já existe",
+        toastAlreadyD: "Esse e-mail já está cadastrado.",
+        toastExportNone: "Nada para exportar",
+        toastExportNoneD: "A lista está vazia.",
+        toastExported: "Exportado",
+        toastExportedD: "Arquivo newsletter.csv baixado.",
+        toastCleared: "Lista limpa",
+        toastClearedD: "Todos os inscritos foram removidos.",
+        toastNoFile: "Nenhum arquivo",
+        toastNoFileD: "Selecione um arquivo para anexar (demo).",
+        toastAttached: "Anexo adicionado",
+        toastAttachedD: "Arquivo listado (não enviado).",
+        toastReset: "Reset concluído",
+        toastResetD: "Checklist e anexos (demo) foram limpos.",
+        toastDocOpen: "Documento (demo)",
+        toastDocOpenD: "Abrir item:",
+        toastSupportSent: "Enviado (demo)",
+        toastSupportSentD: "Sua solicitação foi registrada localmente (simulação).",
+
+        // Checklist statuses
+        statusPending: "Pendente",
+        statusDone: "Concluído",
+        statusLabel: "Status",
+        mark: "Marcar",
+
+        // Docs open label
+        docsOpen: "Abrir",
+
+        // Newsletter empty
+        nlEmptyTitle: "Nenhum inscrito ainda",
+        nlEmptyDesc: "Adicione e-mails para aparecerem aqui.",
+
+        // Docs empty
+        docsNoResultsTitle: "Nenhum resultado",
+        docsNoResultsDesc: "Tente outro termo de busca."
+      },
+
+      en: {
+        portalName: "Hyundai Portal",
+        loginHeroText: "A modern portal with quick access to internal features, documents, and communications.",
+        loginHeroNote: "Local demo (front-end). For real security, use server-side authentication.",
+        chipModern: "Modern Design",
+        chipSmooth: "Smooth Animations",
+        chipFast: "Quick Access",
+
+        signInTitle: "Sign in",
+        signInSubtitle: "Use your credentials to access",
+        emailLabel: "Email",
+        emailPlaceholder: "e.g., name@company.com",
+        passwordLabel: "Password",
+        passwordPlaceholder: "••••••••",
+        demoHint: "Demo: admin@hyundai.com + portal123",
+        accessBtn: "Access",
+        fillDemoBtn: "Fill demo",
+        kbdTip: "Tip: Alt + M opens the menu",
+
+        welcomeDefault: "Welcome!",
+        homeBtn: "Home",
+        logoutBtn: "Logout",
+
+        menuTitle: "Menu",
+        sessionActive: "Active session",
+        shortcuts: "Shortcuts",
+        escCloses: "Esc closes",
+
+        navHome: "🏠 Home",
+        navHomeMeta: "Overview",
+        navNewsletter: "📰 Newsletter",
+        navNewsletterMeta: "Communication",
+        navExpat: "✈️ Expatriation",
+        navExpatMeta: "Processes",
+        navDocs: "📁 Documents",
+        navDocsMeta: "Files",
+        navSupport: "🛟 Support",
+        navSupportMeta: "Help",
+
+        homeHeroTitle: "Internal portal with quick access",
+        homeHeroSub: "Access essential features, updates, and documents with a modern, smooth, responsive experience.",
+        chipBlueWhite: "Blue & White",
+        chipSidebar: "Sidebar menu",
+        chipTransitions: "Smooth transitions",
+        chipSPA: "SPA (internal screens)",
+        goNewsletter: "Go to Newsletter",
+        goDocs: "View Documents",
+
+        quickFeaturesTitle: "Quick features",
+        quickFeaturesSub: "Choose an area to open the corresponding screen.",
+        cardNLTitle: "Newsletter",
+        cardNLDesc: "Register emails, publish announcements, and keep everyone updated.",
+        cardEXTitle: "Expatriation",
+        cardEXDesc: "Checklist of steps, deadlines, and attachments for expatriation processes.",
+        cardDOCTitle: "Documents",
+        cardDOCDesc: "Catalog of files, policies, forms, and essential downloads.",
+
+        updatesTitle: "Quick updates",
+        update1Title: "Welcome to Hyundai Portal",
+        update1Desc: "Use the hamburger menu to navigate between screens.",
+        update2Title: "Navigation tip",
+        update2Desc: "Click the cards to open features.",
+        update3Title: "Languages",
+        update3Desc: "You can switch between Portuguese and English at the top.",
+
+        nlTitle: "📰 Newsletter",
+        nlSub: "Manage announcements and a simple email list (stored locally in your browser).",
+        nlAddTitle: "Add email",
+        nlEmailLabel: "Email",
+        nlEmailPh: "name@company.com",
+        nlNameLabel: "Name (optional)",
+        nlNamePh: "e.g., Maria Silva",
+        nlAddBtn: "Add to list",
+        nlHint: "Data is stored in localStorage (demo only).",
+        nlListTitle: "Subscribers",
+        nlExport: "Export CSV",
+        nlClear: "Clear",
+
+        exTitle: "✈️ Expatriation",
+        exSub: "Checklist with steps and status (example). Mark what’s completed.",
+        exChecklistTitle: "Checklist",
+        exSave: "Save progress",
+        exReset: "Reset",
+        exHint: "Saved in the browser (localStorage). For real use, integrate with a server/database.",
+        exAttachTitle: "Attachments (demo)",
+        exAttachSub: "Upload simulation (does not send to a server).",
+        exChooseFile: "Choose file",
+        exAttachBtn: "Attach (demo)",
+
+        docsTitle: "📁 Documents",
+        docsSub: "Document catalog (example). Replace with real links or integrations.",
+        docsSearchTitle: "Search",
+        docsSearchLabel: "Search document",
+        docsSearchPh: "e.g., Policy, Form, Manual...",
+        docsShortcuts: "Shortcuts",
+        docsS1T: "Internal policies",
+        docsS1D: "Access institutional documents and updated rules.",
+        docsS2T: "Forms",
+        docsS2D: "Ready-made templates for requests and processes.",
+        docsS3T: "Manuals",
+        docsS3D: "Usage guides and operational instructions.",
+
+        supTitle: "🛟 Support",
+        supSub: "Open a request (demo) or ask a question. Great to integrate with a Service Desk.",
+        supNew: "New request",
+        supTitleLabel: "Title",
+        supTitlePh: "e.g., System access",
+        supDescLabel: "Description",
+        supDescPh: "Describe the issue...",
+        supSend: "Send (demo)",
+        supHint: "For production, send to an API/server and generate a ticket.",
+        supBest: "Best practices",
+        supB1T: "Include screenshots and context",
+        supB1D: "Helps the team reproduce and resolve faster.",
+        supB2T: "Provide your user and department",
+        supB2D: "Makes permission and access validation easier.",
+
+        toastOpened: "Screen opened",
+        toastLoginOk: "Login successful",
+        toastLoginOkD: "Access granted to Hyundai Portal.",
+        toastLoginBad: "Invalid credentials",
+        toastLoginBadD: "Use admin@hyundai.com / portal123 (demo).",
+        toastRequired: "Required fields",
+        toastRequiredD: "Fill in email and password.",
+        toastEmailInvalid: "Invalid email",
+        toastEmailInvalidD: "Please enter a valid email.",
+        toastDemoFilled: "Demo filled",
+        toastDemoFilledD: "Click Access to sign in.",
+        toastLoggedOut: "Session ended",
+        toastLoggedOutD: "You logged out.",
+        toastAdded: "Added",
+        toastAddedD: "Email added to the Newsletter.",
+        toastAlready: "Already exists",
+        toastAlreadyD: "This email is already registered.",
+        toastExportNone: "Nothing to export",
+        toastExportNoneD: "The list is empty.",
+        toastExported: "Exported",
+        toastExportedD: "newsletter.csv downloaded.",
+        toastCleared: "List cleared",
+        toastClearedD: "All subscribers were removed.",
+        toastNoFile: "No file",
+        toastNoFileD: "Choose a file to attach (demo).",
+        toastAttached: "Attachment added",
+        toastAttachedD: "File listed (not uploaded).",
+        toastReset: "Reset done",
+        toastResetD: "Checklist and attachments (demo) were cleared.",
+        toastDocOpen: "Document (demo)",
+        toastDocOpenD: "Open item:",
+        toastSupportSent: "Sent (demo)",
+        toastSupportSentD: "Your request was saved locally (simulation).",
+
+        statusPending: "Pending",
+        statusDone: "Done",
+        statusLabel: "Status",
+        mark: "Mark",
+
+        docsOpen: "Open",
+
+        nlEmptyTitle: "No subscribers yet",
+        nlEmptyDesc: "Add emails to see them here.",
+
+        docsNoResultsTitle: "No results",
+        docsNoResultsDesc: "Try another search term."
+      }
+    };
+
+    const LANG_KEY = "hyundai_portal_lang";
+    let currentLang = localStorage.getItem(LANG_KEY) || "pt";
+
+    function t(key){
+      return (I18N[currentLang] && I18N[currentLang][key]) ? I18N[currentLang][key] : (I18N.pt[key] || key);
+    }
+
+    function applyI18n(){
+      // Text nodes
+      $$("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        // Keep emoji already in text? We already store emoji in strings for nav. Use textContent.
+        el.textContent = t(key);
+      });
+
+      // Placeholders
+      $$("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        el.setAttribute("placeholder", t(key));
+      });
+
+      // Update <html lang>
+      document.documentElement.lang = (currentLang === "en") ? "en" : "pt-BR";
+
+      // Update selects
+      const lsLogin = $("#langSelectLogin");
+      const lsApp = $("#langSelectApp");
+      if (lsLogin) lsLogin.value = currentLang;
+      if (lsApp) lsApp.value = currentLang;
+
+      // Re-render dynamic content using i18n strings
+      renderNl();
+      renderExp();
+      renderDocs($("#docSearch")?.value || "");
+    }
+
+    function setLang(lang){
+      currentLang = (lang === "en") ? "en" : "pt";
+      localStorage.setItem(LANG_KEY, currentLang);
+      applyI18n();
+      toast(t("toastOpened"), currentLang === "en" ? "English" : "Português", "success", 1600);
+    }
+
+    // Hook selects
+    $("#langSelectLogin").addEventListener("change", (e) => setLang(e.target.value));
+    $("#langSelectApp").addEventListener("change", (e) => setLang(e.target.value));
+
+    // --- Toasts
+    const toastWrap = $("#toastWrap");
+    function toast(message, detail="", type="info", ttl=2800){
+      const el = document.createElement("div");
+      el.className = `toast ${type}`;
+      el.innerHTML = `
+        <div class="badge" aria-hidden="true"></div>
+        <p><b>${escapeHtml(message)}</b>${detail ? `<span>${escapeHtml(detail)}</span>` : ""}</p>
+      `;
+      toastWrap.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(10px)";
+        el.style.transition = "all .25s ease";
+      }, ttl - 250);
+      setTimeout(() => el.remove(), ttl);
+    }
+
+    // --- Sidebar
+    const hamburger = $("#hamburger");
+    const sidebar = $("#sidebar");
+    const overlay = $("#overlay");
+    const closeSidebarBtn = $("#closeSidebarBtn");
+    function openSidebar(){
+      sidebar.classList.add("open");
+      overlay.classList.add("show");
+      hamburger.dataset.open = "true";
+      hamburger.setAttribute("aria-expanded", "true");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+    function closeSidebar(){
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+      hamburger.dataset.open = "false";
+      hamburger.setAttribute("aria-expanded", "false");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+    hamburger.addEventListener("click", () => sidebar.classList.contains("open") ? closeSidebar() : openSidebar());
+    overlay.addEventListener("click", closeSidebar);
+    closeSidebarBtn.addEventListener("click", closeSidebar);
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeSidebar();
+      if (e.altKey && (e.key.toLowerCase() === "m")) {
+        e.preventDefault();
+        sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
+      }
+    });
+
+    // --- SPA routing
+    const pages = ["home","newsletter","expatriacao","documentos","suporte"];
+    function showPage(page){
+      pages.forEach(p => $("#page-" + p)?.classList.toggle("show", p === page));
+      $$("#nav button").forEach(btn => btn.classList.toggle("active", btn.dataset.page === page));
+      closeSidebar();
+      toast(t("toastOpened"), pageLabel(page), "success", 1700);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function pageLabel(page){
+      const map = {
+        home: currentLang === "en" ? "Home" : "Home",
+        newsletter: currentLang === "en" ? "Newsletter" : "News Letter",
+        expatriacao: currentLang === "en" ? "Expatriation" : "Expatriação",
+        documentos: currentLang === "en" ? "Documents" : "Documentos",
+        suporte: currentLang === "en" ? "Support" : "Suporte"
+      };
+      return map[page] || page;
+    }
+
+    $("#nav").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-page]");
+      if (!btn) return;
+      showPage(btn.dataset.page);
+    });
+
+    document.addEventListener("click", (e) => {
+      const go = e.target.closest("[data-goto]");
+      if (!go) return;
+      const page = go.dataset.goto;
+      if (pages.includes(page)) showPage(page);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      const card = e.target.closest(".card[data-goto]");
+      if (!card) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        showPage(card.dataset.goto);
+      }
+    });
+
+    $("#goHomeBtn").addEventListener("click", () => showPage("home"));
+
+    // --- Login (email + senha)
+    const loginView = $("#loginView");
+    const appView = $("#appView");
+    const loginForm = $("#loginForm");
+    const fillDemoBtn = $("#fillDemoBtn");
+    const welcomeText = $("#welcomeText");
+    const userMeta = $("#userMeta");
+    const logoutBtn = $("#logoutBtn");
+
+    const AUTH_KEY = "hyundai_portal_session";
+    const DEMO_EMAIL = "admin@hyundai.com";
+    const DEMO_PASS = "portal123";
+
+    function setSession(email){
+      localStorage.setItem(AUTH_KEY, JSON.stringify({ email, at: Date.now() }));
+    }
+    function getSession(){
+      try { return JSON.parse(localStorage.getItem(AUTH_KEY) || "null"); }
+      catch { return null; }
+    }
+    function clearSession(){ localStorage.removeItem(AUTH_KEY); }
+
+    function isValidEmail(email){
+      // simples e suficiente para UI
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function enterApp(session){
+      loginView.style.display = "none";
+      appView.classList.add("show");
+      appView.setAttribute("aria-hidden", "false");
+
+      const email = session.email || "";
+      welcomeText.textContent = (currentLang === "en")
+        ? `Welcome, ${email}!`
+        : `Bem-vindo(a), ${email}!`;
+
+      userMeta.textContent = (currentLang === "en")
+        ? `User: ${email}`
+        : `Usuário: ${email}`;
+
+      showPage("home");
+      toast(t("toastLoginOk"), t("toastLoginOkD"), "success");
+    }
+
+    function exitApp(){
+      clearSession();
+      appView.classList.remove("show");
+      appView.setAttribute("aria-hidden", "true");
+      loginView.style.display = "grid";
+      closeSidebar();
+      toast(t("toastLoggedOut"), t("toastLoggedOutD"), "info");
+    }
+
+    fillDemoBtn.addEventListener("click", () => {
+      $("#email").value = DEMO_EMAIL;
+      $("#pass").value = DEMO_PASS;
+      toast(t("toastDemoFilled"), t("toastDemoFilledD"), "info", 2200);
+    });
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = ($("#email").value || "").trim().toLowerCase();
+      const pass  = ($("#pass").value || "");
+
+      if (!email || !pass){
+        toast(t("toastRequired"), t("toastRequiredD"), "danger");
+        return;
+      }
+      if (!isValidEmail(email)){
+        toast(t("toastEmailInvalid"), t("toastEmailInvalidD"), "danger");
+        return;
+      }
+
+      if (email === DEMO_EMAIL && pass === DEMO_PASS){
+        setSession(email);
+        enterApp({ email });
+      } else {
+        toast(t("toastLoginBad"), t("toastLoginBadD"), "danger");
+      }
+    });
+
+    logoutBtn.addEventListener("click", exitApp);
+
+    // auto-session
+    const existing = getSession();
+    if (existing?.email){
+      // show app after i18n applied so labels are correct
+      // we'll enter after applyI18n below
+    }
+
+    /* ---------------------------
+       NEWSLETTER (localStorage)
+       --------------------------- */
+    const NL_KEY = "hyundai_portal_newsletter";
+    const newsletterForm = $("#newsletterForm");
+    const nlList = $("#nlList");
+    const nlExportBtn = $("#nlExportBtn");
+    const nlClearBtn = $("#nlClearBtn");
+
+    function nlGet(){
+      try { return JSON.parse(localStorage.getItem(NL_KEY) || "[]"); }
+      catch { return []; }
+    }
+    function nlSet(list){ localStorage.setItem(NL_KEY, JSON.stringify(list)); }
+
+    function renderNl(){
+      const data = nlGet();
+      nlList.innerHTML = "";
+      if (!data.length){
+        nlList.innerHTML = `
+          <div class="item">
+            <span class="dot" aria-hidden="true"></span>
+            <div>
+              <p class="t">${escapeHtml(t("nlEmptyTitle"))}</p>
+              <p class="d">${escapeHtml(t("nlEmptyDesc"))}</p>
+            </div>
+          </div>`;
+        return;
+      }
+      data.slice().reverse().forEach(entry => {
+        const el = document.createElement("div");
+        el.className = "item";
+        const name = entry.name ? `<p class="t">${escapeHtml(entry.name)}</p>` : `<p class="t">${escapeHtml(currentLang==="en" ? "Subscriber" : "Inscrito")}</p>`;
+        el.innerHTML = `
+          <span class="dot" aria-hidden="true"></span>
+          <div>
+            ${name}
+            <p class="d">${escapeHtml(entry.email)} • ${new Date(entry.at).toLocaleString()}</p>
+          </div>`;
+        nlList.appendChild(el);
+      });
+    }
+
+    newsletterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = ($("#nlEmail").value || "").trim().toLowerCase();
+      const name = ($("#nlName").value || "").trim();
+
+      if (!isValidEmail(email)){
+        toast(t("toastEmailInvalid"), t("toastEmailInvalidD"), "danger");
+        return;
+      }
+
+      const list = nlGet();
+      if (list.some(x => x.email === email)){
+        toast(t("toastAlready"), t("toastAlreadyD"), "info");
+        return;
+      }
+
+      list.push({ email, name, at: Date.now() });
+      nlSet(list);
+      $("#nlEmail").value = "";
+      $("#nlName").value = "";
+      renderNl();
+      toast(t("toastAdded"), t("toastAddedD"), "success");
+    });
+
+    nlClearBtn.addEventListener("click", () => {
+      nlSet([]);
+      renderNl();
+      toast(t("toastCleared"), t("toastClearedD"), "info");
+    });
+
+    nlExportBtn.addEventListener("click", () => {
+      const list = nlGet();
+      if (!list.length){
+        toast(t("toastExportNone"), t("toastExportNoneD"), "info");
+        return;
+      }
+      const header = "email,name,date\n";
+      const rows = list.map(x => {
+        const date = new Date(x.at).toISOString();
+        const safeName = (x.name || "").replaceAll('"','""');
+        return `"${x.email}","${safeName}","${date}"`;
+      }).join("\n");
+      const csv = header + rows;
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "newsletter.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+
+      toast(t("toastExported"), t("toastExportedD"), "success");
+    });
+
+    /* ---------------------------
+       EXPATRIACAO (checklist)
+       --------------------------- */
+    const EXP_KEY = "hyundai_portal_expatriacao";
+    const expChecklistEl = $("#expChecklist");
+    const expSaveBtn = $("#expSaveBtn");
+    const expResetBtn = $("#expResetBtn");
+    const expFile = $("#expFile");
+    const expAttachBtn = $("#expAttachBtn");
+    const expAttachList = $("#expAttachList");
+
+    const expSteps = [
+      { id:"doc_pessoal", pt:"Reunir documentos pessoais", en:"Gather personal documents" },
+      { id:"contrato", pt:"Validar contrato e aditivos", en:"Validate contract and addendums" },
+      { id:"visto", pt:"Processo de visto / permissão", en:"Visa / permit process" },
+      { id:"moradia", pt:"Planejar moradia e deslocamento", en:"Plan housing and relocation" },
+      { id:"saude", pt:"Seguro saúde e orientações", en:"Health insurance and guidance" },
+      { id:"onboarding", pt:"Onboarding na unidade destino", en:"Onboarding at destination unit" },
+    ];
+
+    function expGet(){
+      try { return JSON.parse(localStorage.getItem(EXP_KEY) || "{}"); }
+      catch { return {}; }
+    }
+    function expSet(obj){ localStorage.setItem(EXP_KEY, JSON.stringify(obj)); }
+
+    function renderExp(){
+      const state = expGet();
+      expChecklistEl.innerHTML = "";
+      expSteps.forEach(step => {
+        const label = currentLang === "en" ? step.en : step.pt;
+        const done = !!state[step.id];
+        const statusText = done ? t("statusDone") : t("statusPending");
+
+        const wrap = document.createElement("div");
+        wrap.className = "item";
+        wrap.innerHTML = `
+          <span class="dot" aria-hidden="true"></span>
+          <div style="width:100%;">
+            <p class="t">${escapeHtml(label)}</p>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:8px;">
+              <span class="d" style="margin:0;">${escapeHtml(t("statusLabel"))}: <b>${escapeHtml(statusText)}</b></span>
+              <label style="display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none; text-transform:none; font-size:12px; letter-spacing:0; color:var(--muted); font-weight:800;">
+                <input type="checkbox" data-exp-check="${step.id}" ${done ? "checked" : ""} />
+                ${escapeHtml(t("mark"))}
+              </label>
+            </div>
+          </div>
+        `;
+        expChecklistEl.appendChild(wrap);
+      });
+    }
+
+    expChecklistEl.addEventListener("change", (e) => {
+      const cb = e.target.closest("input[type='checkbox'][data-exp-check]");
+      if (!cb) return;
+      const id = cb.dataset.expCheck;
+      const state = expGet();
+      state[id] = cb.checked;
+      expSet(state);
+      renderExp();
+    });
+
+    expSaveBtn.addEventListener("click", () => {
+      toast(currentLang==="en" ? "Progress saved" : "Progresso salvo",
+            currentLang==="en" ? "Checklist updated in the browser." : "Checklist atualizado no navegador.",
+            "success");
+    });
+
+    expResetBtn.addEventListener("click", () => {
+      expSet({});
+      renderExp();
+      expAttachList.innerHTML = "";
+      expFile.value = "";
+      toast(t("toastReset"), t("toastResetD"), "info");
+    });
+
+    expAttachBtn.addEventListener("click", () => {
+      const f = expFile.files && expFile.files[0];
+      if (!f){
+        toast(t("toastNoFile"), t("toastNoFileD"), "danger");
+        return;
+      }
+      const el = document.createElement("div");
+      el.className = "item";
+      el.innerHTML = `
+        <span class="dot" aria-hidden="true"></span>
+        <div>
+          <p class="t">${escapeHtml(f.name)}</p>
+          <p class="d">${Math.round(f.size/1024)} KB • (demo local)</p>
+        </div>
+      `;
+      expAttachList.prepend(el);
+      expFile.value = "";
+      toast(t("toastAttached"), t("toastAttachedD"), "success");
+    });
+
+    /* ---------------------------
+       DOCUMENTOS (search/filter)
+       --------------------------- */
+    const docSearch = $("#docSearch");
+    const docCards = $("#docCards");
+
+    const documents = [
+      { id:"pol_001", tag:{pt:"Política", en:"Policy"}, title:{pt:"Política de Segurança da Informação", en:"Information Security Policy"}, desc:{pt:"Diretrizes e responsabilidades de segurança.", en:"Security guidelines and responsibilities."} },
+      { id:"frm_014", tag:{pt:"Formulário", en:"Form"}, title:{pt:"Formulário de Solicitação Interna", en:"Internal Request Form"}, desc:{pt:"Modelo padrão para solicitações.", en:"Standard template for requests."} },
+      { id:"man_006", tag:{pt:"Manual", en:"Manual"}, title:{pt:"Manual de Integração (Onboarding)", en:"Onboarding Manual"}, desc:{pt:"Passo a passo para novos colaboradores.", en:"Step-by-step for new employees."} },
+      { id:"pol_022", tag:{pt:"Política", en:"Policy"}, title:{pt:"Política de Viagens e Despesas", en:"Travel & Expenses Policy"}, desc:{pt:"Regras para viagens corporativas.", en:"Rules for corporate travel."} },
+      { id:"gui_101", tag:{pt:"Guia", en:"Guide"}, title:{pt:"Guia de Acesso ao Portal", en:"Portal Access Guide"}, desc:{pt:"Como usar o menu, recursos e atalhos.", en:"How to use the menu, features, and shortcuts."} },
+      { id:"chk_210", tag:{pt:"Checklist", en:"Checklist"}, title:{pt:"Checklist Expatriação", en:"Expatriation Checklist"}, desc:{pt:"Lista de etapas e documentos.", en:"List of steps and documents."} },
+    ];
+
+    function renderDocs(query=""){
+      const q = (query || "").trim().toLowerCase();
+      const filtered = documents.filter(d => {
+        const title = (currentLang==="en" ? d.title.en : d.title.pt).toLowerCase();
+        const desc  = (currentLang==="en" ? d.desc.en : d.desc.pt).toLowerCase();
+        const tag   = (currentLang==="en" ? d.tag.en : d.tag.pt).toLowerCase();
+        return !q || title.includes(q) || desc.includes(q) || tag.includes(q);
+      });
+
+      docCards.innerHTML = "";
+      if (!filtered.length){
+        docCards.innerHTML = `
+          <div class="card" style="cursor:default;">
+            <div class="icon" aria-hidden="true">?</div>
+            <h3>${escapeHtml(t("docsNoResultsTitle"))}</h3>
+            <p>${escapeHtml(t("docsNoResultsDesc"))}</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(d => {
+        const tag = currentLang==="en" ? d.tag.en : d.tag.pt;
+        const title = currentLang==="en" ? d.title.en : d.title.pt;
+        const desc  = currentLang==="en" ? d.desc.en : d.desc.pt;
+
+        const el = document.createElement("div");
+        el.className = "card";
+        el.setAttribute("tabindex","0");
+        el.innerHTML = `
+          <div class="icon" aria-hidden="true">${escapeHtml(tag.slice(0,3).toUpperCase())}</div>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(desc)}</p>
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; position:relative; z-index:1;">
+            <span class="chip">${escapeHtml(tag)}</span>
+            <a class="btn btn-ghost inline-link" href="javascript:void(0)" data-doc-open="${escapeHtml(d.id)}">
+              <span aria-hidden="true">🔎</span> ${escapeHtml(t("docsOpen"))}
+            </a>
+          </div>
+        `;
+        docCards.appendChild(el);
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("[data-doc-open]");
+      if (!a) return;
+      const id = a.dataset.docOpen;
+      toast(t("toastDocOpen"), `${t("toastDocOpenD")} ${id}`, "info", 2600);
+    });
+
+    docSearch.addEventListener("input", () => renderDocs(docSearch.value));
+
+    /* ---------------------------
+       SUPORTE (demo)
+       --------------------------- */
+    const supportForm = $("#supportForm");
+    supportForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const title = ($("#supTitleInput").value || "").trim();
+      const desc = ($("#supDesc").value || "").trim();
+      if (!title || !desc){
+        toast(t("toastRequired"), currentLang==="en" ? "Fill in title and description." : "Preencha título e descrição.", "danger");
+        return;
+      }
+      $("#supTitleInput").value = "";
+      $("#supDesc").value = "";
+      toast(t("toastSupportSent"), t("toastSupportSentD"), "success", 3200);
+    });
+
+    // Utility
+    function escapeHtml(str){
+      return (str ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // Apply language on load
+    applyI18n();
+
+    // Enter app if session exists
+    const existing2 = getSession();
+    if (existing2?.email){
+      enterApp(existing2);
+    } else {
+      // ensure login language select reflects saved value
+      $("#langSelectLogin").value = currentLang;
+      $("#langSelectApp").value = currentLang;
+    }
+
+    // Initial renders
+    renderNl();
+    renderExp();
+    renderDocs("");
+
+  </script>
+</body>
+</html>
